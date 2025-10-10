@@ -1,0 +1,144 @@
+{
+  "Type": 0,
+  "Bounds": {
+    "Width": 10.5477705,
+    "Height": 9.304413,
+    "CenterX": 0.6160948,
+    "CenterY": 0.634449244
+  },
+  "FileReferences": {
+    "Moc": "nono.moc3",
+    "Textures": [
+      "nono.4096/texture_00.png"
+    ],
+    "Physics": "nono.physics3.json",
+    "PhysicsV2": {
+      "File": "nono.physics3.json"
+    },
+    "Pose": "motion/待机.motion3.json",
+    "Motions": {
+      "1": [
+        {
+          "Name": "1",
+          "Text": "你要干什么",
+          "Choices": [
+            {
+              "Text": "充电",
+              "NextMtn": "2:开充"
+            },
+            {
+              "Text": "跳舞",
+              "NextMtn": "3:跳舞"
+            }
+          ]
+        }
+      ],
+      "2": [
+        {
+          "Name": "开充",
+          "File": "motion/充电全流程.motion3.json",
+          "Sound": "music/chongdian.mp3",
+          "Text": "开始充电",
+          "NextMtn": "2:22"
+        }
+      ],
+      "3": [
+        {
+          "Name": "跳舞",
+          "File": "motion/跳舞.motion3.json",
+          "Text": "跳舞"
+        }
+      ],
+      "Tap2": [
+        {
+          "File": "motion/哈气了.motion3.json"
+        },
+        {
+          "File": "motion/嘻嘻.motion3.json"
+        }
+      ],
+      "Tap3": [
+        {
+          "File": "motion/大于小于.motion3.json"
+        },
+        {
+          "File": "motion/沮丧.motion3.json"
+        },
+        {
+          "File": "motion/流汗.motion3.json"
+        },
+        {
+          "File": "motion/迷糊.motion3.json"
+        }
+      ]
+    }
+  },
+  "Controllers": {
+    "ParamHit": {},
+    "ParamLoop": {},
+    "KeyTrigger": {
+      "Enabled": true
+    },
+    "ParamTrigger": {
+      "Enabled": true
+    },
+    "AreaTrigger": {
+      "Enabled": true
+    },
+    "HandTrigger": {},
+    "EyeBlink": {
+      "MinInterval": 500,
+      "MaxInterval": 6000,
+      "Enabled": true
+    },
+    "LipSync": {
+      "Gain": 5.0
+    },
+    "MouseTracking": {
+      "SmoothTime": 0.15,
+      "Enabled": true
+    },
+    "AutoBreath": {
+      "Enabled": true
+    },
+    "ExtraMotion": {
+      "Enabled": true
+    },
+    "Accelerometer": {
+      "Enabled": true
+    },
+    "Microphone": {},
+    "Transform": {},
+    "FaceTracking": {
+      "Enabled": true
+    },
+    "HandTracking": {},
+    "ParamValue": {},
+    "PartOpacity": {},
+    "ArtmeshOpacity": {},
+    "ArtmeshColor": {},
+    "ArtmeshCulling": {
+      "DefaultMode": 0
+    },
+    "IntimacySystem": {}
+  },
+  "HitAreas": [
+    {
+      "Name": "1",
+      "Id": "ArtMesh61",
+      "Motion": "1:1"
+    },
+    {
+      "Name": "2",
+      "Id": "ArtMesh68"
+    },
+    {
+      "Name": "3",
+      "Id": "ArtMesh72"
+    }
+  ],
+  "Options": {
+    "ScaleFactor": 1.30000031,
+    "TexType": 0
+  }
+}

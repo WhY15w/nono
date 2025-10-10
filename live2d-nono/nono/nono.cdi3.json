@@ -1,0 +1,379 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "Param",
+			"GroupId": "ParamGroup",
+			"Name": "充电"
+		},
+		{
+			"Id": "Param5",
+			"GroupId": "ParamGroup",
+			"Name": "充电心电图"
+		},
+		{
+			"Id": "Param6",
+			"GroupId": "ParamGroup",
+			"Name": "心电图运动"
+		},
+		{
+			"Id": "Param2",
+			"GroupId": "ParamGroup",
+			"Name": "充电光环"
+		},
+		{
+			"Id": "Param12",
+			"GroupId": "ParamGroup",
+			"Name": "充电光环上下"
+		},
+		{
+			"Id": "Param13",
+			"GroupId": "ParamGroup",
+			"Name": "充电光环上下2"
+		},
+		{
+			"Id": "Param3",
+			"GroupId": "ParamGroup",
+			"Name": "光环动画"
+		},
+		{
+			"Id": "Param4",
+			"GroupId": "ParamGroup",
+			"Name": "普通nono"
+		},
+		{
+			"Id": "Param7",
+			"GroupId": "ParamGroup2",
+			"Name": "><"
+		},
+		{
+			"Id": "Param8",
+			"GroupId": "ParamGroup2",
+			"Name": "迷糊"
+		},
+		{
+			"Id": "Param9",
+			"GroupId": "ParamGroup2",
+			"Name": "犀利or沮丧"
+		},
+		{
+			"Id": "Param10",
+			"GroupId": "ParamGroup2",
+			"Name": "开心"
+		},
+		{
+			"Id": "Param11",
+			"GroupId": "ParamGroup2",
+			"Name": "正常"
+		},
+		{
+			"Id": "ParamEyeLOpen",
+			"GroupId": "ParamGroup2",
+			"Name": "左眼　开闭"
+		},
+		{
+			"Id": "ParamEyeROpen",
+			"GroupId": "ParamGroup2",
+			"Name": "右眼　开闭"
+		},
+		{
+			"Id": "Param21",
+			"GroupId": "ParamGroup2",
+			"Name": "流汗"
+		},
+		{
+			"Id": "Param17",
+			"GroupId": "ParamGroup5",
+			"Name": "大小"
+		},
+		{
+			"Id": "Param18",
+			"GroupId": "ParamGroup5",
+			"Name": "角度"
+		},
+		{
+			"Id": "Param14",
+			"GroupId": "ParamGroup3",
+			"Name": "x"
+		},
+		{
+			"Id": "Param15",
+			"GroupId": "ParamGroup3",
+			"Name": "y"
+		},
+		{
+			"Id": "Param16",
+			"GroupId": "ParamGroup3",
+			"Name": "z"
+		},
+		{
+			"Id": "Param19",
+			"GroupId": "ParamGroup4",
+			"Name": "左耳朵z"
+		},
+		{
+			"Id": "Param22",
+			"GroupId": "ParamGroup4",
+			"Name": "右耳朵z"
+		},
+		{
+			"Id": "Param23",
+			"GroupId": "ParamGroup4",
+			"Name": "左翅膀z"
+		},
+		{
+			"Id": "Param24",
+			"GroupId": "ParamGroup4",
+			"Name": "右翅膀z"
+		},
+		{
+			"Id": "ParamEyeBallX",
+			"GroupId": "ParamGroup7",
+			"Name": "眼珠 X"
+		},
+		{
+			"Id": "ParamEyeBallY",
+			"GroupId": "ParamGroup7",
+			"Name": "眼珠 Y"
+		},
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "ParamGroup7",
+			"Name": "角度 X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "ParamGroup7",
+			"Name": "角度 Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "ParamGroup7",
+			"Name": "角度 Z"
+		},
+		{
+			"Id": "Param20",
+			"GroupId": "ParamGroup6",
+			"Name": "气浪消失"
+		},
+		{
+			"Id": "Param25",
+			"GroupId": "ParamGroup6",
+			"Name": "x"
+		},
+		{
+			"Id": "Param26",
+			"GroupId": "ParamGroup6",
+			"Name": "y"
+		},
+		{
+			"Id": "ParamEyeLSmile",
+			"GroupId": "",
+			"Name": "左眼　微笑"
+		},
+		{
+			"Id": "ParamEyeRSmile",
+			"GroupId": "",
+			"Name": "右眼　微笑"
+		},
+		{
+			"Id": "ParamBrowLY",
+			"GroupId": "",
+			"Name": "左眉上下"
+		},
+		{
+			"Id": "ParamBrowRY",
+			"GroupId": "",
+			"Name": "右眉　上下"
+		},
+		{
+			"Id": "ParamBrowLX",
+			"GroupId": "",
+			"Name": "左眉　左右"
+		},
+		{
+			"Id": "ParamBrowRX",
+			"GroupId": "",
+			"Name": "右眉　左右"
+		},
+		{
+			"Id": "ParamBrowLAngle",
+			"GroupId": "",
+			"Name": "左眉　角度"
+		},
+		{
+			"Id": "ParamBrowRAngle",
+			"GroupId": "",
+			"Name": "右眉　角度"
+		},
+		{
+			"Id": "ParamBrowLForm",
+			"GroupId": "",
+			"Name": "左眉　変形"
+		},
+		{
+			"Id": "ParamBrowRForm",
+			"GroupId": "",
+			"Name": "右眉　変形"
+		},
+		{
+			"Id": "ParamMouthForm",
+			"GroupId": "",
+			"Name": "嘴　变形"
+		},
+		{
+			"Id": "ParamMouthOpenY",
+			"GroupId": "",
+			"Name": "嘴　张开和闭合"
+		},
+		{
+			"Id": "ParamCheek",
+			"GroupId": "",
+			"Name": "脸颊泛红"
+		},
+		{
+			"Id": "ParamBodyAngleX",
+			"GroupId": "",
+			"Name": "身体旋转　X"
+		},
+		{
+			"Id": "ParamBodyAngleY",
+			"GroupId": "",
+			"Name": "身体旋转　Y"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "身体旋转　Z"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "呼吸"
+		},
+		{
+			"Id": "ParamHairFront",
+			"GroupId": "",
+			"Name": "摇动 前发"
+		},
+		{
+			"Id": "ParamHairSide",
+			"GroupId": "",
+			"Name": "摇动 侧发"
+		},
+		{
+			"Id": "ParamHairBack",
+			"GroupId": "",
+			"Name": "摇动 后发"
+		}
+	],
+	"ParameterGroups": [
+		{
+			"Id": "ParamGroup",
+			"GroupId": "",
+			"Name": "动画"
+		},
+		{
+			"Id": "ParamGroup2",
+			"GroupId": "",
+			"Name": "表情"
+		},
+		{
+			"Id": "ParamGroup5",
+			"GroupId": "",
+			"Name": "犀利or沮丧"
+		},
+		{
+			"Id": "ParamGroup3",
+			"GroupId": "",
+			"Name": "位移"
+		},
+		{
+			"Id": "ParamGroup4",
+			"GroupId": "",
+			"Name": "耳朵翅膀"
+		},
+		{
+			"Id": "ParamGroup7",
+			"GroupId": "",
+			"Name": "角度"
+		},
+		{
+			"Id": "ParamGroup6",
+			"GroupId": "",
+			"Name": "气浪"
+		}
+	],
+	"Parts": [
+		{
+			"Id": "Part7",
+			"Name": "组 2"
+		},
+		{
+			"Id": "Part15",
+			"Name": "普通后背"
+		},
+		{
+			"Id": "Part21",
+			"Name": "充电圈后"
+		},
+		{
+			"Id": "Part8",
+			"Name": "眼睛"
+		},
+		{
+			"Id": "Part16",
+			"Name": "普通nono"
+		},
+		{
+			"Id": "Part19",
+			"Name": "普通底"
+		},
+		{
+			"Id": "Part20",
+			"Name": "普通翅膀"
+		},
+		{
+			"Id": "Part9",
+			"Name": "充电"
+		},
+		{
+			"Id": "Part10",
+			"Name": "><"
+		},
+		{
+			"Id": "Part11",
+			"Name": "迷糊"
+		},
+		{
+			"Id": "Part12",
+			"Name": "犀利or沮丧"
+		},
+		{
+			"Id": "Part13",
+			"Name": "微笑"
+		},
+		{
+			"Id": "Part14",
+			"Name": "正常"
+		}
+	],
+	"CombinedParameters": [
+		[
+			"Param14",
+			"Param15"
+		],
+		[
+			"ParamEyeBallX",
+			"ParamEyeBallY"
+		],
+		[
+			"ParamAngleX",
+			"ParamAngleY"
+		],
+		[
+			"Param25",
+			"Param26"
+		]
+	]
+}

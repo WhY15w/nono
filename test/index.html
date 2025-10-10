@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- run build.bat in ws to generate live2d-render.bundle.js -->
+    <script src="../dist/live2d-render.bundle.umd.js"></script>
+  </head>
+  <body>
+    <script>
+      Live2dRender.initializeLive2D({
+        // live2d 所在区域的背景颜色
+        BackgroundRGBA: [0.0, 0.0, 0.0, 0.0],
+
+        // live2d 的 model3.json 文件的相对路径
+        ResourcesPath: "https://api.yuyuqaq.cn/live2d/nono/nono.model3.json",
+
+        // live2d 的大小
+        CanvasSize: {
+          height: 200,
+          width: 200,
+        },
+
+        ShowToolBox: true,
+
+        // 是否使用 indexDB 进行缓存优化，这样下一次载入就不会再发起网络请求了
+        LoadFromCache: false,
+      }).then(() => {
+        console.log("finish load");
+        // Live2dRender.setRandomExpression();
+        // Live2dRender.setMessageBox("hello world", 1000);
+      });
+    </script>
+  </body>
+</html>
