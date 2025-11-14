@@ -10,10 +10,13 @@ const _defaultIconFgColor = "white";
 const _defaultHoverColor = "rgb(224, 209, 41)";
 
 let container: undefined | HTMLDivElement = undefined;
-let containerTimer: NodeJS.Timeout | string | number | undefined = undefined;
+let containerTimer: number | undefined = undefined;
 let collapse = false;
 let widthXoffset = 35;
 const live2dBoxItemCss = "__live2d-toolbox-item";
+
+const LS_KEY = "live2d_collapsed";
+let initialXoffset = 0;
 
 function addCssClass() {
   const style = document.createElement("style");
@@ -141,7 +144,12 @@ function makeLive2dCollapseIcon(container: HTMLDivElement): HTMLDivElement {
     icon.style.backgroundColor = _defaultIconBgColor;
   });
 
-  let xoffset = 0;
+  if (collapse) {
+    icon.style.transform = "rotate(180deg)";
+  }
+
+  let xoffset = initialXoffset;
+
   icon.onclick = async () => {
     const canvas = LAppDefine.Canvas;
     if (canvas) {
@@ -166,140 +174,14 @@ function makeLive2dCollapseIcon(container: HTMLDivElement): HTMLDivElement {
         collapse = false;
         icon.style.transform = "rotate(0)";
       }
+
+      // 写入 localStorage 记录当前状态
+      try {
+        localStorage.setItem(LS_KEY, collapse ? "true" : "false");
+      } catch (e) {}
     }
   };
   return icon;
-}
-
-/**
- * @description 创建 【收起/展开 展示表情列表】 的按钮
- * @param container
- * @returns
- */
-function makeExpressionListCollapseIcon(
-  container: HTMLDivElement
-): HTMLDivElement {
-  const icon = createCommonIcon(svgIcon.expressionIcon, "", ["button-item"]);
-  icon.style.backgroundColor = _defaultIconBgColor;
-  icon.style.fontSize = "1.05rem";
-  icon.style.position = "relative";
-
-  // 创建一个容器，来容纳所有的表情按钮
-  const iconsWrapper = document.createElement("div");
-  const animationDurationMS = 7;
-  iconsWrapper.style.position = "absolute";
-  iconsWrapper.style.top = 0 + "px";
-  iconsWrapper.style.flexDirection = "column";
-  iconsWrapper.style.transition = "all .75s cubic-bezier(0.23, 1, 0.32, 1)";
-  iconsWrapper.style.display = "flex";
-  iconsWrapper.style.opacity = "0";
-
-  let currentTranslateY = 0;
-  iconsWrapper.style.transform = `translate(-75px, ${
-    currentTranslateY - 50
-  }px)`;
-
-  // 注册 icon 的鼠标事件
-  icon.addEventListener("mouseenter", () => {
-    icon.style.backgroundColor = _defaultHoverColor;
-
-    // 光标进入
-    iconsWrapper.style.visibility = "visible";
-    iconsWrapper.style.opacity = "1";
-    iconsWrapper.style.transform = `translate(-75px, ${currentTranslateY}px)`;
-  });
-
-  icon.addEventListener("mouseleave", () => {
-    icon.style.backgroundColor = _defaultIconBgColor;
-
-    // 光标退出
-    iconsWrapper.style.opacity = "0";
-    iconsWrapper.style.transform = `translate(-75px, ${
-      currentTranslateY - 50
-    }px)`;
-
-    setTimeout(() => {
-      iconsWrapper.style.visibility = "hidden";
-    }, 500);
-  });
-
-  // 容器滚动
-  iconsWrapper.addEventListener("wheel", (e) => {
-    // 获取当前的transform值
-    const currentTransform = getComputedStyle(iconsWrapper).transform;
-    const matrix = new WebKitCSSMatrix(currentTransform);
-
-    // 获取当前y轴平移值
-    let translateY = matrix.m42; // y轴平移量
-
-    // 根据滚轮方向调整位置
-    if (e.deltaY > 0) {
-      // 滚轮向下滚动，元素上移
-      translateY -= 50;
-    } else {
-      // 滚轮向上滚动，元素下移
-      translateY += 50;
-    }
-
-    currentTranslateY = translateY;
-
-    // 更新transform属性
-    iconsWrapper.style.transform = `translate(-75px, ${translateY}px)`;
-
-    e.preventDefault(); // 阻止默认的滚动行为
-  });
-
-  // 创建每一个表情的 icon
-  const expressionIcons = makeExpressionListIcons(container);
-  // 加入展开列表中
-  for (const expression of expressionIcons) {
-    iconsWrapper.appendChild(expression);
-  }
-  icon.appendChild(iconsWrapper);
-
-  return icon;
-}
-
-/**
- * @description 展示所有的表情
- * @param container
- * @returns
- */
-function makeExpressionListIcons(container: HTMLDivElement) {
-  const manager = LAppLive2DManager.getInstance();
-  const canvas = LAppDefine.Canvas;
-  const icons: HTMLDivElement[] = [];
-
-  if (manager && canvas) {
-    const maxExpNum = Math.max(
-      0,
-      Math.floor(canvas.height / _defaultIconSize) - 1
-    );
-
-    // TODO: 支持更多模型
-    const model = manager.getModel(0);
-    const expNum = Math.min(model._expressions.getSize(), maxExpNum);
-
-    for (let i = 0; i < expNum; ++i) {
-      const name = model._expressions._keyValues[i].first;
-
-      // 去除结尾的 json
-      const renderName = name
-        .replace(".exp3.json", "")
-        .replace(".motion3.json", "");
-      const icon = createCommonIcon(svgIcon.catIcon, renderName);
-
-      icon.classList.add("expression-item");
-
-      icon.onclick = async () => {
-        model.setExpression(name);
-      };
-
-      icons.push(icon);
-    }
-  }
-
-  return icons;
 }
 
 /**
@@ -360,6 +242,7 @@ function makeStarIcon(container: HTMLDivElement): HTMLDivElement {
 
 function makeBoxItemContainer() {
   const container = document.createElement("div");
+  container.id = "live2d-toolbox-container";
   container.style.display = "flex";
   container.style.alignItems = "center";
   container.style.justifyContent = "center";
@@ -374,18 +257,21 @@ function makeBoxItemContainer() {
   container.style.right = canvas.width - widthXoffset + "px";
   container.style.top = window.innerHeight - canvas.height + 35 + "px";
 
-  // 增加几个常用工具
+  if (initialXoffset > 0) {
+    container.style.transform = `translateX(${Math.max(
+      0,
+      initialXoffset - widthXoffset
+    )}px)`;
+  }
+
   // 1. 收起 live2d
   const showLive2dIcon = makeLive2dCollapseIcon(container);
-  // 2. 展示表情
-  // const showExpressionsIcon = makeExpressionListCollapseIcon(container);
-  // 3. 刷新缓存
+  // 2. 刷新缓存
   const refreshCacheIcon = makeRefreshCacheIcon(container);
-  // 4. 跳转到作者bilibili
+  // 3. 跳转到作者bilibili
   const starIcon = makeStarIcon(container);
 
   container.appendChild(showLive2dIcon);
-  // container.appendChild(showExpressionsIcon);
   container.appendChild(refreshCacheIcon);
   container.appendChild(starIcon);
 
@@ -414,6 +300,37 @@ export function reloadToolBox() {
 
 export function addToolBox() {
   addCssClass();
+
+  try {
+    const saved = localStorage.getItem(LS_KEY);
+    if (saved === "true") {
+      const canvas = LAppDefine.Canvas;
+      if (canvas) {
+        const canvasWidth = Math.ceil(canvas.width);
+
+        const prevTransition = canvas.style.transition;
+        (canvas as any).dataset.prevTransition = prevTransition ?? "";
+
+        canvas.style.transition = "none";
+        canvas.style.transform = `translateX(${canvasWidth}px)`;
+
+        collapse = true;
+        initialXoffset = canvasWidth;
+
+        canvas.getBoundingClientRect();
+
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            const prev = (canvas as any).dataset.prevTransition || "";
+            canvas.style.transition = prev;
+            try {
+              delete (canvas as any).dataset.prevTransition;
+            } catch (e) {}
+          }, 50);
+        });
+      }
+    }
+  } catch (e) {}
 
   container = makeBoxItemContainer();
 
