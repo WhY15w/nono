@@ -7,8 +7,8 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "src/main.ts"),
       name: "Live2dRender",
-      fileName: "live2d-render.bundle",
-      formats: ["umd"],
+      fileName: (format) => `live2d-render.${format}.js`,
+      formats: ["es", "umd"],
     },
     rollupOptions: {
       external: [],
