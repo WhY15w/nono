@@ -172,7 +172,7 @@ if (window) {
   };
 }
 
-export {
+const Live2dRender = {
   initializeLive2D,
   setExpression,
   setMessageBox,
@@ -180,3 +180,7 @@ export {
   hideMessageBox,
   revealMessageBox,
 };
+
+export { Live2dRender };
+
+export default Live2dRender;
