@@ -181,6 +181,4 @@ const Live2dRender = {
   revealMessageBox,
 };
 
-export { Live2dRender };
-
 export default Live2dRender;
