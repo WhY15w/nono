@@ -80,12 +80,8 @@ export class LAppView {
     this._touchManager = null;
     this._deviceToScreen = null;
 
-    try {
-      if (gl && this._programId) {
-        gl.deleteProgram(this._programId);
-      }
-    } catch (e) {
-      console.warn("Failed to delete shader program:", e);
+    if (gl && this._programId) {
+      gl.deleteProgram(this._programId);
     }
 
     this._programId = null;
