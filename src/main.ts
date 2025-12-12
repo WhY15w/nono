@@ -166,7 +166,7 @@ if (window) {
    */
   window.onresize = () => {
     const live2dModel = LAppDelegate.getInstance();
-    if (live2dModel && LAppDefine.CanvasSize === "auto") {
+    if (live2dModel && LAppDefine.CanvasSize === "auto" && LAppDefine.Canvas) {
       live2dModel.onResize();
     }
   };
