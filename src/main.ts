@@ -5,7 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-import { LAppDelegate } from "./lappdelegate";
+import { LAppDelegate, type CanvasSize } from "./lappdelegate";
 import LAppDefine from "./lappdefine";
 import { LAppLive2DManager } from "./lapplive2dmanager";
 import { LAppMessageBox } from "./lappmessagebox";
@@ -14,49 +14,65 @@ import { addToolBox } from "./toolbox";
 
 interface Live2dRenderConfig {
   CanvasId?: string;
-  CanvasSize?: { height: number; width: number } | "auto";
+  CanvasSize?: CanvasSize;
   BackgroundRGBA?: [number, number, number, number];
   ResourcesPath?: string;
   LoadFromCache?: boolean;
   ShowToolBox?: boolean;
-  MinifiedJSUrl: string;
-  Live2dCubismcoreUrl: string;
+  MinifiedJSUrl?: string;
+  Live2dCubismcoreUrl?: string;
 }
 
-async function launchLive2d() {
+const DEFAULT_MINIFIED_JS_URL =
+  "https://unpkg.com/core-js-bundle@3.6.1/minified.js";
+const DEFAULT_CUBISM_CORE_URL =
+  "https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js";
+
+// 避免重复插入外部脚本（同 URL 多次初始化时）
+const loadedScriptPromises = new Map<string, Promise<void>>();
+
+async function launchLive2d(): Promise<boolean> {
   const live2dModel = LAppDelegate.getInstance();
   const ok = live2dModel.initialize();
   if (!ok) {
     console.log("初始化失败，退出");
-  } else {
-    // just run
-    live2dModel.run();
-    // show
-    if (LAppDefine.Canvas) {
-      setTimeout(() => {
-        LAppDefine.Canvas.style.opacity = "1";
-        if (LAppDefine.ShowToolBox) {
-          addToolBox();
-        }
-      }, 500);
-    }
+    return false;
   }
+
+  live2dModel.run();
+
+  // show
+  const canvas = LAppDefine.Canvas;
+  if (canvas) {
+    setTimeout(() => {
+      canvas.style.opacity = "1";
+      if (LAppDefine.ShowToolBox) {
+        addToolBox();
+      }
+    }, 500);
+  }
+
+  return true;
+}
+
+function getFirstModel() {
+  const manager = LAppLive2DManager.getInstance();
+  if (!manager) return null;
+
+  // 优先用 getModel(0)，兼容旧代码
+  const model =
+    (manager as any).getModel?.(0) ?? (manager as any).model ?? null;
+  return model;
 }
 
 function setExpression(name: string) {
-  const manager = LAppLive2DManager.getInstance();
-  if (manager) {
-    // 默认拿第一个模型
-    const model = manager.getModel(0);
-    model.setExpression(name);
-  }
+  const model = getFirstModel();
+  model?.setExpression?.(name);
 }
 
 function setRandomExpression() {
-  const manager = LAppLive2DManager.getInstance();
-  if (manager) {
-    manager.model.setRandomExpression();
-  }
+  const model = getFirstModel();
+  model?.setRandomExpression?.();
 }
 
 function setMessageBox(message: string, duration: number) {
@@ -74,55 +90,48 @@ function revealMessageBox() {
   messageBox.revealMessageBox();
 }
 
-/**
- *
- * @param src
- * @returns
- */
-function load(src: string): Promise<void> {
+function loadScriptOnce(src: string): Promise<void> {
+  const existing = loadedScriptPromises.get(src);
+  if (existing) return existing;
+
+  // 若页面已存在相同 src 的 script，认为已加载/正在加载
+  const already = Array.from(document.scripts).some((s) => s.src === src);
+  if (already) {
+    const p = Promise.resolve();
+    loadedScriptPromises.set(src, p);
+    return p;
+  }
+
   const script = document.createElement("script");
   script.src = src;
 
-  return new Promise((resolve, reject) => {
-    script.onload = () => {
-      resolve();
-    };
-    script.onerror = (error) => {
-      reject(error);
-    };
+  const p = new Promise<void>((resolve, reject) => {
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`脚本加载失败: ${src}`));
     document.head.appendChild(script);
   });
+
+  loadedScriptPromises.set(src, p);
+  return p;
 }
 
 async function loadLibs(urls: string[]) {
-  const ps = [];
-
-  for (const url of urls) {
-    ps.push(load(url));
-  }
-
-  for (const p of ps) {
-    await p;
-  }
+  // 并发加载即可；外部脚本之间无依赖时更快
+  await Promise.all(urls.map((u) => loadScriptOnce(u)));
 }
 
 async function initializeLive2D(config: Live2dRenderConfig) {
-  // 如果有 live2d 就不创建了
-  const els = document.querySelectorAll("#live2d");
+  const canvasId = config.CanvasId ?? LAppDefine.CanvasId;
+
+  // 如果已存在同 id canvas，则不重复创建
+  const els = document.querySelectorAll(`#${CSS.escape(canvasId)}`);
   if (els.length >= 1) {
     return;
   }
 
-  if (config.MinifiedJSUrl === undefined) {
-    config.MinifiedJSUrl = "https://unpkg.com/core-js-bundle@3.6.1/minified.js";
-  }
-  if (config.Live2dCubismcoreUrl === undefined) {
-    config.Live2dCubismcoreUrl =
-      "https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js";
-  }
-  if (config.ShowToolBox === undefined) {
-    config.ShowToolBox = false;
-  }
+  config.MinifiedJSUrl ??= DEFAULT_MINIFIED_JS_URL;
+  config.Live2dCubismcoreUrl ??= DEFAULT_CUBISM_CORE_URL;
+  config.ShowToolBox ??= false;
 
   LAppDefine.ShowToolBox = config.ShowToolBox;
 
@@ -140,7 +149,8 @@ async function initializeLive2D(config: Live2dRenderConfig) {
   if (config.ResourcesPath) {
     LAppDefine.ResourcesPath = config.ResourcesPath;
   }
-  if (config.LoadFromCache && window.indexedDB) {
+
+  if (config.LoadFromCache && typeof indexedDB !== "undefined") {
     LAppDefine.LoadFromCache = config.LoadFromCache;
     // 初始化缓存数据库
     const db = await initialiseIndexDB("db", 1, "live2d");
@@ -150,26 +160,19 @@ async function initializeLive2D(config: Live2dRenderConfig) {
   return launchLive2d();
 }
 
-if (window) {
-  /**
-   * 終了時の処理
-   */
-  window.onbeforeunload = (): void => {
+if (typeof window !== "undefined") {
+  // 不覆盖宿主页面已有监听
+  window.addEventListener("beforeunload", () => {
     const live2dModel = LAppDelegate.getInstance();
-    if (live2dModel) {
-      live2dModel.release();
-    }
-  };
+    live2dModel?.release();
+  });
 
-  /**
-   * Process when changing screen size.
-   */
-  window.onresize = () => {
+  window.addEventListener("resize", () => {
     const live2dModel = LAppDelegate.getInstance();
     if (live2dModel && LAppDefine.CanvasSize === "auto" && LAppDefine.Canvas) {
       live2dModel.onResize();
     }
-  };
+  });
 }
 
 const Live2dRender = {
