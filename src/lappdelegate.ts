@@ -147,17 +147,21 @@ export class LAppDelegate {
    * 解放する。
    */
   public release(): void {
-    this._textureManager.release();
-    this._textureManager = null;
+    if (this._textureManager) {
+      this._textureManager.release();
+      this._textureManager = null;
+    }
 
-    this._view.release();
-    this._view = null;
+    if (this._view) {
+      this._view.release();
+      this._view = null;
+    }
 
-    // リソースを解放
-    LAppLive2DManager.releaseInstance();
+    LAppLive2DManager.releaseInstance?.();
 
-    // Cubism SDKの解放
-    CubismFramework.dispose();
+    if (CubismFramework.isStarted()) {
+      CubismFramework.dispose();
+    }
   }
 
   /**
@@ -193,7 +197,9 @@ export class LAppDelegate {
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
       // 描画更新
-      this._view.render();
+      if (this._view) {
+        this._view.render();
+      }
 
       // ループのために再帰呼び出し
       requestAnimationFrame(loop);
